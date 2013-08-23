@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_bg"
+    android:orientation="vertical" >
+    <RelativeLayout
+        android:id="@+id/edit_photo_layout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="#3b84ce">
+        <ImageView 
+            android:id="@+id/edit_photo_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/back_selector"/>
+        <LinearLayout 
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content" 
+          
+          android:layout_centerInParent="true"
+           android:orientation="vertical">
+            <TextView 
+                android:id="@+id/edit_photo_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:textSize="18sp"
+                android:gravity="center"
+                android:textColor="#FFFFFF"/>
+            <TextView 
+                android:id="@+id/edit_photo_pagenum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:textSize="12sp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textColor="#FFFFFF"/>
+        </LinearLayout>
+        <ImageView 
+            android:id="@+id/edit_photo_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/edit_photo_list_selector"
+            android:layout_alignParentRight="true"
+            />
+        
+    </RelativeLayout>
+    <com.appxy.tools.MyViewPager
+            android:id="@+id/edit_photo_viewpagger"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/edit_photo_layout1"
+            android:layout_above="@+id/edit_photo_layout2"
+           
+            
+            />
+        
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_photo_layout2"
+        android:layout_alignParentBottom="true"
+        android:background="#3b84ce">
+        <ImageView 
+            android:id="@+id/edit_photo_takephoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:src="@drawable/take_photo_selector2"/>
+        <ImageView 
+            android:id="@+id/edit_photo_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/delete_selector"
+         
+           
+            />
+         <ImageView 
+            android:id="@+id/edit_photo_rotate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/rotate_selector"
+           
+            />
+         <ImageView 
+            android:id="@+id/edit_photo_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/share_selector"
+           
+            />
+        
+         <ImageView 
+            android:id="@+id/edit_photo_move"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/move_selector"
+            android:layout_weight="1"
+            />
+        
+        
+   </LinearLayout>
+   
+    <ProgressBar 
+         android:id="@+id/edit_photo_pb"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_centerInParent="true"
+         android:visibility="invisible" />
+
+</RelativeLayout>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:orientation="vertical" >
+   
+    <it.sephiroth.android.library.imagezoom.ImageViewTouch
+        android:id="@+id/process_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/bw_layout"
+        android:scaleType="fitCenter" 
+        />
+    <RelativeLayout
+         android:id="@+id/bw_layout"
+         android:layout_width="match_parent"
+         android:layout_height="60dp"
+         android:layout_above="@+id/test_layout"
+        
+         android:background="#626569">
+         
+       <LinearLayout
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:orientation="horizontal"
+             android:layout_centerInParent="true">
+        <LinearLayout
+             android:id="@+id/ll1"     
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:padding="1dip"
+             android:background="#8f8f8f"                      
+             android:orientation="horizontal">
+             <ImageView
+                android:id="@+id/bw1"                
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="#262626" />
+             
+        </LinearLayout>
+         
+        <LinearLayout 
+             android:id="@+id/ll2"  
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:padding="1dip"
+             android:background="#989898"
+             android:layout_marginLeft="15dp"
+             android:orientation="horizontal">
+             <ImageView 
+                android:id="@+id/bw2"     
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="#3c3c3c" />
+             
+        </LinearLayout>
+         
+        <LinearLayout 
+             android:id="@+id/ll3"  
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:padding="1dip"
+             android:background="#989898"
+             android:layout_marginLeft="15dp"
+             android:orientation="horizontal">
+             <ImageView 
+                android:id="@+id/bw3"     
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="#5a5a5a" />
+             
+        </LinearLayout>
+         
+        <LinearLayout 
+             android:id="@+id/ll4"  
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:padding="1dip"
+             android:background="#b9b9b9"
+             android:layout_marginLeft="15dp"
+             android:orientation="horizontal">
+             <ImageView 
+                android:id="@+id/bw4"     
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="#9c9c9c" />
+             
+        </LinearLayout>
+         
+           
+         
+        <LinearLayout 
+             android:id="@+id/ll5"  
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:padding="1dip"
+             android:background="#f2f2f2"
+             android:layout_marginLeft="15dp"
+             android:orientation="horizontal">
+             <ImageView 
+                android:id="@+id/bw5"     
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="#dedede" />
+             
+        </LinearLayout>
+       </LinearLayout>
+    </RelativeLayout>
+    
+     <LinearLayout
+         android:id="@+id/test_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+       
+        android:layout_alignParentBottom="true"
+        android:background="#3b84ce">
+        <ImageView 
+            android:id="@+id/process_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:src="@drawable/color_selector"/>
+        <ImageView 
+            android:id="@+id/process_bw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/bw2"            
+            />
+        <ImageView 
+            android:id="@+id/process_gray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/gray_selector"      
+            />
+        <ImageView 
+            android:id="@+id/process_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/save_selector2"      
+            />
+        
+        
+   </LinearLayout>
+  
+
+</RelativeLayout>

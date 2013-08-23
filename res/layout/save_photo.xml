@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_bg"
+    >
+    <RelativeLayout
+          android:id="@+id/save_photo_rl"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" 
+          android:layout_alignParentTop="true"
+          android:background="#3b84ce"
+          >
+      <RelativeLayout 
+          android:id = "@+id/save_photo_layout"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" 
+          android:layout_centerVertical="true"
+         android:layout_alignParentLeft="true"
+         android:layout_marginRight="20dp"
+         android:layout_toLeftOf="@+id/save_photo_line"
+          android:layout_marginLeft="10dp"
+          android:layout_alignTop="@+id/save_photo_save"
+          android:layout_alignBottom="@+id/save_photo_save"
+          
+          >
+          <EditText
+              android:id="@+id/save_photo_text5"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:paddingLeft="10dp"
+              android:paddingRight="10dp"
+              android:text="New Document"
+              android:textSize="18sp"
+              android:textColorHint="#FFFFFF"
+              android:textColor="#FFFFFF"
+            
+              android:layout_centerVertical="true"
+              android:gravity="center_vertical"
+              android:background="@null"
+              android:inputType="text"
+              android:singleLine="true"    />
+          <ImageView 
+              android:id="@+id/save_photo_text_line"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content" 
+              android:layout_below="@+id/save_photo_text5"
+              android:layout_alignLeft="@+id/save_photo_text5"
+              android:layout_marginTop="4dp"
+              android:scaleType="fitXY"
+              android:src="@drawable/edit"/>
+      </RelativeLayout>
+      <LinearLayout
+          android:id="@+id/save_photo_line"
+          android:layout_width="1dip"
+          android:layout_height="wrap_content"
+          android:layout_toLeftOf="@+id/save_photo_save"
+          android:layout_alignTop="@+id/save_photo_save"
+          android:layout_alignBottom="@+id/save_photo_save"
+          android:layout_marginTop="8dp"
+          android:layout_marginBottom="8dp"       
+          android:orientation="vertical" 
+          android:background="#77b9fc"  />
+       <ImageView 
+             android:id= "@+id/save_photo_save"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content" 
+             android:layout_alignParentRight="true"
+             android:src="@drawable/save_selector2"
+           />
+     </RelativeLayout>
+     <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/save_photo_rl" 
+          android:layout_alignParentBottom="true">
+       <ImageView 
+           android:id="@+id/save_photo_image"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content" 
+           android:layout_centerInParent="true"/>
+         
+     </RelativeLayout>
+   
+</RelativeLayout>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color  name = "select">#00b3f9</color>
+    <color  name = "unselect">#3b84ce</color>
+    <color  name = "test">#4f5154</color>
+</resources>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_pop_linear"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:background="#3b4045"
+    android:orientation="vertical" >
+    
+    <TextView 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="VIEW AS"
+        android:paddingLeft="15dp"
+        android:textColor="#78828c"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:textSize="16sp"/>
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#69727b">
+        
+    </LinearLayout>
+    <TextView 
+         android:id="@+id/mainviewgrid"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:text="Grid View"
+         android:textColor="#FFFFFF"
+         android:paddingLeft="15dp"
+         android:paddingTop="10dp"
+         android:paddingBottom="10dp"
+         android:textSize="18sp"/>
+     <LinearLayout 
+         android:layout_width="match_parent"
+         android:layout_height="1px"
+         android:background="#1e2124">
+        
+    </LinearLayout>
+    <TextView 
+         android:id="@+id/mainviewlist"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:text="List View"
+         android:textColor="#FFFFFF"
+         android:paddingLeft="15dp"
+         android:paddingTop="10dp"
+         android:paddingBottom="10dp"
+      
+         android:textSize="18sp"/>
+      
+      
+        
+          
+    <TextView 
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="SORT BY"
+         android:textColor="#78828c"
+         android:paddingLeft="15dp"
+         android:paddingTop="10dp"
+         android:paddingBottom="10dp"
+         android:textSize="16sp"/>
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#69727b">
+        
+    </LinearLayout>
+    <TextView 
+        android:id="@+id/mainorder1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Date Created"
+        android:paddingLeft="15dp"
+        android:textColor="#FFFFFF"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textSize="18sp"/>
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#1e2124">
+        
+    </LinearLayout>
+    <TextView 
+        android:id="@+id/mainorder2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:textColor="#FFFFFF"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textSize="18sp"/>
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#1e2124">
+        
+    </LinearLayout>
+    <TextView 
+        android:id="@+id/mainset"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Settings"
+        android:textColor="#FFFFFF"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textSize="18sp"/>
+    
+
+</LinearLayout>

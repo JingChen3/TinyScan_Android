@@ -1,0 +1,194 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+   
+    android:background="@drawable/main_bg"
+     >
+
+   <RelativeLayout 
+       android:id="@+id/main_layout"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:background="#3b84ce">
+      <ImageView
+            android:id="@+id/mainlogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_centerVertical="true"
+            
+            android:src="@drawable/logo2"/>
+      <ImageView 
+          android:id="@+id/main_setlist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/mainlogo"
+          
+            android:clickable="true"
+            android:src="@drawable/setlist_selector"/>
+      <ImageView 
+          android:id="@+id/main_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:clickable="true"
+           
+            android:src="@drawable/search_selector"/>
+      
+      <ImageView
+            android:id="@+id/mainback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            
+            android:layout_centerVertical="true"
+            android:visibility="gone"
+            android:clickable="true"
+            android:src="@drawable/main_back_selector"/>
+      <RelativeLayout 
+          android:id = "@+id/search_relative"
+          android:layout_width="250dp"
+          android:layout_height="wrap_content" 
+          android:layout_centerVertical="true"
+          android:layout_toRightOf="@+id/mainback"
+          android:layout_marginLeft="10dp"
+          android:layout_alignTop="@+id/mainback"
+          android:layout_alignBottom="@+id/mainback"
+          android:visibility="gone"
+          >
+          <EditText
+              android:id="@+id/search_text"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:paddingLeft="5dp"
+              android:paddingRight="5dp"
+              android:hint="Search Document"
+              android:textSize="18sp"
+              android:textColorHint="#FFFFFF"
+              android:textColor="#FFFFFF"
+             android:layout_toLeftOf="@+id/search_text_delete"
+             android:layout_alignParentLeft="true"
+             android:layout_centerVertical="true"
+              android:gravity="center_vertical"
+              android:background="@null"
+              android:inputType="text"
+              android:singleLine="true"    />
+           <ImageView 
+              android:id="@+id/search_text_delete"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content" 
+            android:visibility="invisible"
+              android:layout_centerVertical="true"
+              android:layout_alignParentRight="true"
+              android:src="@drawable/delete3"/>
+          <ImageView 
+              android:id="@+id/search_text_line"
+              android:layout_width="250dp"
+              android:layout_height="wrap_content" 
+              android:layout_below="@+id/search_text"
+              android:layout_marginTop="4dp"
+              android:scaleType="fitXY"
+              android:src="@drawable/edit"/>
+      </RelativeLayout>
+      
+      <ImageView 
+          android:id="@+id/mainback2"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+         
+          android:visibility="gone"
+          android:clickable="true"
+          android:src="@drawable/back_selector2"/>
+      <LinearLayout
+          android:id="@+id/selectline2"
+          android:layout_width="fill_parent"
+          android:layout_height="3dp"
+         android:layout_below="@+id/mainback2"
+         android:orientation="horizontal"
+         android:visibility="gone"
+          android:background="#0086bb"  />
+      <LinearLayout
+          android:id="@+id/selectline"
+          android:layout_width="1dip"
+          android:layout_height="wrap_content"
+          android:layout_toRightOf="@+id/mainback2"
+          android:layout_alignTop="@+id/selecttext"
+          android:layout_alignBottom="@+id/selecttext"
+          android:layout_marginTop="8dp"
+          android:layout_marginBottom="8dp"
+         
+          android:orientation="vertical"
+          android:visibility="gone"
+          android:background="#058ec4"  />
+      <TextView 
+          android:id="@+id/selecttext"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_toRightOf="@+id/selectline"
+          android:layout_marginLeft="10dp"
+           android:paddingTop="2dp"
+           android:paddingBottom="2dp"
+          android:textColor="#FFFFFF"
+          android:textSize="20sp"
+          android:layout_centerVertical="true"
+          android:layout_alignTop="@+id/mainback2"
+          android:layout_alignBottom="@+id/mainback2"
+          android:gravity="center_vertical"
+          
+          android:visibility="gone"/>
+     
+      <ImageView
+            android:id="@+id/mainedit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:visibility="gone"
+            
+           android:layout_toLeftOf="@+id/mainshare"
+            android:src="@drawable/edit_selector"/>
+      <ImageView 
+          android:id="@+id/mainshare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            
+            android:layout_toLeftOf="@+id/maindelete"
+            android:clickable="true"
+            android:src="@drawable/share_selector"/>
+      <ImageView 
+          android:id="@+id/maindelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"  
+            android:visibility="gone"  
+            
+            android:layout_alignParentRight="true"
+            android:clickable="true"         
+            android:src="@drawable/delete_selector2"/>
+ 
+   </RelativeLayout>
+  
+   <LinearLayout
+       android:id="@+id/main_linear"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="vertical"
+      
+       android:layout_alignParentBottom="true"
+       android:layout_below="@+id/main_layout">
+       
+   </LinearLayout>
+   <ImageView 
+        android:id="@+id/main_takepicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:clickable="true"
+        android:layout_marginBottom="15dp"
+        android:src="@drawable/camera_selector"/>
+   
+   
+
+</RelativeLayout>

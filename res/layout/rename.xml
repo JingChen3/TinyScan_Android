@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/renamell"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#3b4045"
+    android:orientation="vertical" >
+    
+    <TextView 
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:textSize="25sp"
+        android:textColor="#3b9cff"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:text="Rename"/>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="#3b9cff">
+        
+    </LinearLayout>
+    
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        >
+        <EditText
+           android:id = "@+id/renameedit"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:paddingLeft="10dp"
+           android:paddingRight="10dp"
+           android:background="@null"
+           android:layout_alignParentLeft="true"
+           android:textColor="#FFFFFF"
+           android:inputType="text"/>
+        <ImageView 
+            android:layout_below="@+id/renameedit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:layout_centerHorizontal="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/editline"/>
+        
+   </RelativeLayout>
+    <LinearLayout
+        android:layout_marginTop="8dp"
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:background="#565e66">
+        
+    </LinearLayout>
+    <LinearLayout
+      
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#444a4f">
+        <TextView 
+            android:id="@+id/renamecancel"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            
+            android:gravity="center"
+            android:text="Cancel"
+             android:textColor="#FFFFFF"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            />
+        <LinearLayout
+       
+        android:layout_width="1dip"
+        android:layout_height="fill_parent"
+        android:background="#565e66">
+        
+    </LinearLayout>
+        <TextView 
+            android:id="@+id/renamesave"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            
+            android:gravity="center"
+            android:text="Save"
+            android:textColor="#FFFFFF"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            />
+        
+    </LinearLayout>
+    
+    
+
+</LinearLayout>
