@@ -26,7 +26,7 @@ public class BitmapTools {
 	 
 	 public static Bitmap resizeImage(Bitmap bitmap) {
 			
-			
+		   
 			int width = bitmap.getWidth();
 			int height = bitmap.getHeight();
 			
@@ -54,9 +54,12 @@ public class BitmapTools {
 			float scale2 = 1f;
 			scale1 = (width+0.0f)/mwidth;
 			scale2 = (height+0.0f)/mheight;
-			
-		    scale = scale1>scale2?scale2:scale1;
-			
+			if(scale1>scale2){
+				scale = scale2;
+			}else{
+				scale = scale1;
+			}
+			Log.e("sad",scale+"  "+scale1+"   "+scale2);
 			Matrix matrix = new Matrix();
 			matrix.postScale(scale, scale);
 			Bitmap newbitmap = Bitmap.createBitmap(bitmap, 0, 0, mwidth, mheight, matrix, true);

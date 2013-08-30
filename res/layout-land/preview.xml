@@ -7,7 +7,7 @@
        android:layout_width="wrap_content"
        android:layout_height="fill_parent"
        android:layout_alignParentLeft="true"
-       android:background="#000000"
+       android:background="#4f5154"
        android:layout_toLeftOf="@+id/preview_layout">
      <FrameLayout
        android:id="@+id/previewlayout"
@@ -61,8 +61,8 @@
          android:layout_height="wrap_content" 
          android:layout_alignParentLeft="true"
          android:layout_alignParentBottom="true"
-         android:layout_marginLeft="80dp"
-         android:layout_marginBottom="20dp"
-         android:src="@drawable/flash_selector3"/>
+         android:layout_marginLeft="72dp"
+         android:layout_marginBottom="24dp"
+         android:src="@drawable/flash_selector"/>
 
 </RelativeLayout>

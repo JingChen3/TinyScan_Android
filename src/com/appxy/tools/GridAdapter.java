@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class GridAdapter extends BaseAdapter{
@@ -35,7 +36,8 @@ public class GridAdapter extends BaseAdapter{
 	public final class ListItemView{                     
 	    public ImageView image;
 	    public TextView folder_name, creat_time, page_num;  
-	    public LinearLayout rl, rl2;
+	    public RelativeLayout rl;
+	    public RelativeLayout rl2;
         
     }     
 	
@@ -78,8 +80,8 @@ public class GridAdapter extends BaseAdapter{
                listItemView.image = (ImageView)convertView.findViewById(R.id.griditem_image);
                listItemView.folder_name = (TextView)convertView.findViewById(R.id.griditem_folder);
                listItemView.creat_time = (TextView)convertView.findViewById(R.id.griditem_time);
-               listItemView.rl = ( LinearLayout)convertView.findViewById(R.id.griditem_relative);
-               listItemView.rl2 = ( LinearLayout)convertView.findViewById(R.id.griditem_relative2);
+              // listItemView.rl = ( RelativeLayout)convertView.findViewById(R.id.griditem_relative);
+              // listItemView.rl2 = (RelativeLayout)convertView.findViewById(R.id.griditem_relative2);
                listItemView.page_num = (TextView)convertView.findViewById(R.id.griditem_num);
                convertView.setTag(listItemView);   
           
@@ -92,35 +94,35 @@ public class GridAdapter extends BaseAdapter{
         String image_Path =  root_Path + minfo.getName() +"/"+minfo.getImage_name();
       
         int num  = minfo.getImage_num();
-       
         
+       
         if(minfo.isCheck()){
-        	listItemView.rl2.setBackgroundColor(Color.rgb(56, 152, 250));
-        	//listItemView.rl.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        	listItemView.rl.setBackgroundColor(Color.TRANSPARENT);
+        	listItemView.image.setBackgroundResource(R.drawable.paper_shadow4);
         	
         }else{
-        	//listItemView.rl2.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        	listItemView.rl2.setBackgroundColor(Color.TRANSPARENT);
         	
-        	 if(num > 1){
-     	    	listItemView.rl.setBackgroundResource(R.drawable.photo_bg);
-     	    	
-     	    }else{
-     	    	//listItemView.rl.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-     	    	//listItemView.rl.setBackgroundColor(Color.TRANSPARENT);
-     	    	listItemView.rl.setBackgroundResource(R.drawable.photo_bg2);
-     	    	
-     	    }
+        	if(num == 1){
+            	listItemView.image.setBackgroundResource(R.drawable.paper1_shadow);
+            }else if(num == 2){
+            	listItemView.image.setBackgroundResource(R.drawable.paper2_shadow);
+            }else{
+            	listItemView.image.setBackgroundResource(R.drawable.paper_shadow);
+            }
+        	
         }
 	    String name = minfo.getName();
 	   
-	    if(Activity_Main.getBitmapFromMemCache(name) != null){
+	  if(Activity_Main.getBitmapFromMemCache(name) != null){
 	    	loadBitmap2(listItemView.image, name);
 	    }else{
 	    loadBitmap(image_Path,listItemView.image, name);
 	    }
-	    listItemView.page_num.setText(num +"pages");
+	    if(num == 1){
+	    	 listItemView.page_num.setText(num +" page");
+	    }else{
+	    	 listItemView.page_num.setText(num +" pages");	
+	    }
+	   
 	    
 	   
         listItemView.folder_name.setText(name);   

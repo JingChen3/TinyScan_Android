@@ -2,39 +2,37 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp"
+    
     >
     
-    <RelativeLayout 
-        android:layout_width="97dp"
-        android:layout_height="127dp"
-        android:layout_centerInParent="true"
-        >
-   
-      
-    <RelativeLayout 
-        android:layout_width="92dp"
-        android:layout_height="122dp" 
-        android:background="@drawable/list_photo_bg"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp">
+   <RelativeLayout 
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" 
+      android:layout_marginTop="5dp"
+      android:layout_centerInParent="true">
     <ImageView 
         android:id="@+id/listphoto_photo"
-        android:layout_width="90dp"
-        android:layout_height="120dp" 
+        android:layout_width="88dp"
+        android:layout_height="124dp" 
+        android:background="@drawable/list_photo_bg"
+        android:padding="4dp"
         android:scaleType="fitXY"
-        android:layout_centerInParent="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        
        />
-    </RelativeLayout>
+   
     <TextView 
         android:id="@+id/listphoto_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+       
         android:layout_alignParentBottom="true"
-        android:paddingRight="2dp"
-        android:gravity="right"    />
+        android:layout_alignRight="@+id/listphoto_photo"
+        android:textColor="#000000"
+        android:paddingBottom="4dp"
+       android:paddingRight="8dp"
+         />
     
      <ImageView 
         android:id="@+id/listphoto_delete"
@@ -44,5 +42,5 @@
         android:layout_alignParentLeft="true"
         android:clickable="true"
         android:src="@drawable/delete3"/>
-     </RelativeLayout>
+    </RelativeLayout>
 </RelativeLayout>

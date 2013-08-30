@@ -8,7 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.appxy.tinyscan.R;
@@ -23,7 +25,7 @@ public class PageSizeAdapter extends BaseAdapter{
 	public final class ListItemView{                     
 	   
 	    public ImageView image;  
-	  
+	    public RadioButton rb;
         
     }   
 	
@@ -62,14 +64,18 @@ public class PageSizeAdapter extends BaseAdapter{
 	           
 	               convertView =inflater.inflate(R.layout.pagesize_item, null);   
 	               listItemView.image = (ImageView)convertView.findViewById(R.id.pagesize_item_image);
-	              
+	               listItemView.rb = (RadioButton)convertView.findViewById(R.id.pagesize_item_rb);
 	               convertView.setTag(listItemView);   
 	          
 	        }else {   
 	           listItemView = (ListItemView)convertView.getTag();   
 	        }
 	       listItemView.image.setImageResource((Integer) mlist.get(arg0).get("image"));
-	     
+	       if((Boolean) mlist.get(arg0).get("selected")){
+	    	   listItemView.rb.setChecked(true);  
+	       }else{
+	    	   listItemView.rb.setChecked(false);  
+	       }
 	        return convertView ; 
 	}
 

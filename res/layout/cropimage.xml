@@ -14,7 +14,7 @@
         android:layout_alignParentTop="true"
         android:orientation="vertical"
         android:gravity="center"
-        android:background="#000000"
+        android:background="#4f5154"
         >
         
     </LinearLayout>
@@ -34,27 +34,48 @@
             android:src="@drawable/cancel_selector"
            />
         
-        <RelativeLayout
+        <LinearLayout 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            >
-            <ImageView 
-               android:id="@+id/detect_sizeImage"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:src="@drawable/detect_bg" />
+            android:orientation="horizontal"
+            android:layout_alignTop="@+id/detect_cancel"
+            android:layout_alignBottom="@+id/detect_cancel"
+            android:layout_centerInParent="true">
+            <LinearLayout 
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+               
+                android:background="#77b9fc"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                >
+                
+            </LinearLayout>
+            
             <TextView 
                android:id="@+id/detect_sizeText"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
+               android:layout_width="140dp"
+               android:layout_height="match_parent"
+               
                android:text="A4"
                android:clickable="false"
-               android:layout_centerInParent="true"
-               android:textSize="20sp"
+               android:focusable="false"
+               android:focusableInTouchMode="false"
+               android:gravity="center"
+               
+               android:textSize="18sp"
                android:textColor="#FFFFFF"/>
-        </RelativeLayout>
-       
+           <LinearLayout 
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                
+                android:background="#77b9fc"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                >
+                
+            </LinearLayout>
+       </LinearLayout>
         
          <ImageView 
             android:id="@+id/detect_save"

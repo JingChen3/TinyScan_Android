@@ -19,11 +19,15 @@ public class MyApplication extends Application {
     public static boolean isUpdate = false;
     
     public static boolean isAdd = false;
+    public static boolean islist = false;
+    public static boolean islistchanged = false;
+    public static int listitemid = 0;
     public static String addpath;
     public static String folder_path;
     public static int folder_id;
     public static int degree;
     public static int sizeid = 0;
+    public static int stateheight = 0;
     public void onCreate(){
         super.onCreate();
        

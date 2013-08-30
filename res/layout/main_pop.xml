@@ -6,15 +6,17 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:background="#3b4045"
+    android:background="#424548"
+    android:alpha="0.99"
     android:orientation="vertical" >
     
     <TextView 
-        android:layout_width="wrap_content"
+        android:id="@+id/mainviewas"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="VIEW AS"
         android:paddingLeft="15dp"
-        android:textColor="#78828c"
+        android:textColor="#a6aeb7"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:textSize="16sp"/>
@@ -31,13 +33,14 @@
          android:text="Grid View"
          android:textColor="#FFFFFF"
          android:paddingLeft="15dp"
-         android:paddingTop="10dp"
-         android:paddingBottom="10dp"
+         android:paddingTop="12dp"
+         
+         android:paddingBottom="12dp"
          android:textSize="18sp"/>
      <LinearLayout 
          android:layout_width="match_parent"
          android:layout_height="1px"
-         android:background="#1e2124">
+         android:background="#2c2f32">
         
     </LinearLayout>
     <TextView 
@@ -47,8 +50,8 @@
          android:text="List View"
          android:textColor="#FFFFFF"
          android:paddingLeft="15dp"
-         android:paddingTop="10dp"
-         android:paddingBottom="10dp"
+         android:paddingTop="12dp"
+         android:paddingBottom="12dp"
       
          android:textSize="18sp"/>
       
@@ -56,13 +59,14 @@
         
           
     <TextView 
-         android:layout_width="wrap_content"
+         android:id="@+id/mainviewsort"
+         android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:text="SORT BY"
-         android:textColor="#78828c"
+         android:textColor="#a6aeb7"
          android:paddingLeft="15dp"
-         android:paddingTop="10dp"
-         android:paddingBottom="10dp"
+         android:paddingTop="5dp"
+         android:paddingBottom="5dp"
          android:textSize="16sp"/>
     <LinearLayout 
         android:layout_width="match_parent"
@@ -77,13 +81,13 @@
         android:text="Date Created"
         android:paddingLeft="15dp"
         android:textColor="#FFFFFF"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
         android:textSize="18sp"/>
     <LinearLayout 
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#1e2124">
+        android:background="#2c2f32">
         
     </LinearLayout>
     <TextView 
@@ -93,13 +97,13 @@
         android:text="Title"
         android:textColor="#FFFFFF"
         android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
         android:textSize="18sp"/>
     <LinearLayout 
         android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#1e2124">
+        android:layout_height="1dp"
+        android:background="#69727b">
         
     </LinearLayout>
     <TextView 
@@ -109,8 +113,8 @@
         android:text="Settings"
         android:textColor="#FFFFFF"
         android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
         android:textSize="18sp"/>
     
 

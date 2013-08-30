@@ -23,6 +23,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -34,7 +36,7 @@ import android.widget.Toast;
 
 public class Activity_SavePhoto extends Activity{
 	
-	ImageView image,save;
+	ImageView image,save, delete;
 	EditText title;
 	String path = Environment.getExternalStorageDirectory()+"/MyTinyScan";
 	Context context;
@@ -60,10 +62,39 @@ public class Activity_SavePhoto extends Activity{
 				
 			}else{
 				file.mkdir();
+				
 			}
 		}
 		
 		title = (EditText)findViewById(R.id.save_photo_text5);
+		delete = (ImageView)findViewById(R.id.save_text_delete);
+		title.addTextChangedListener(new TextWatcher(){
+
+			@Override
+			public void afterTextChanged(Editable arg0) {
+				// TODO Auto-generated method stub
+				if(arg0.toString().equals("")){
+					delete.setVisibility(4);
+				}else{
+					delete.setVisibility(0);
+				}
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence arg0, int arg1,
+					int arg2, int arg3) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onTextChanged(CharSequence arg0, int arg1, int arg2,
+					int arg3) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 		int i = 1;
 		File mfile = new File(path + "/" +"New Document");
 		if(mfile.exists()){
@@ -78,6 +109,15 @@ public class Activity_SavePhoto extends Activity{
 		
 		title.requestFocus();
 		
+		delete.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				title.setText("");
+			}
+			
+		});
 		save = (ImageView)findViewById(R.id.save_photo_save);
 		save.setOnClickListener(new OnClickListener(){
 
@@ -88,16 +128,19 @@ public class Activity_SavePhoto extends Activity{
 					InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 					imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 			    }
-				
+				if(title.getText().toString().equals("")){
+					Toast.makeText(context, "Document name is required !!", Toast.LENGTH_SHORT).show();
+				}else{
 				if(ExistSDCard()){
 					
 					
 	          		final File newfolder = new File(path+"/"+title.getText().toString());
 	          		if(newfolder.exists()){
 	          			Toast.makeText(context, "File already exists !!", Toast.LENGTH_SHORT).show();
-	          			return;
-	          		}
+	          			
+	          		}else{
 	          		newfolder.mkdir();
+	          		
 	          		progressDialog=ProgressDialog.show(context,"Please wait ","Saving...");
 	          		mThread = new Thread(new Runnable(){
 
@@ -109,10 +152,12 @@ public class Activity_SavePhoto extends Activity{
 			          		String time2 = sdf.format(time);
 			          		String name = time2.substring(0,14)+MyApplication.sizeid+"000.jpg";
 			          		File newfile = new File(newfolder.getPath()+"/"+name);
+			          		
 						    OutputStream out = null;
 			     			try {
 								out = new BufferedOutputStream(new FileOutputStream(newfile));
-								MyApplication.savebitmap.compress(CompressFormat.JPEG, 85, out);	
+			     			
+								MyApplication.savebitmap.compress(CompressFormat.JPEG, 100, out);	
 				     		    out.flush();
 				     		    out.close();
 				     		    Photo_info minfo = new Photo_info(newfolder.getName(),newfile.getName().substring(0, 4)+"-"+newfile.getName().substring(4, 6)+"-"+newfile.getName().substring(6, 8),1,newfile.getName(), false);
@@ -126,7 +171,7 @@ public class Activity_SavePhoto extends Activity{
 				     		    MyApplication.folder_path = newfolder.getName();
 				     		    MyApplication.folder_id = Activity_Main.mlist2.indexOf(minfo);
 				     		    MyApplication.isUpdate = true;
-				     		   Thread.sleep(500);
+				     		    Thread.sleep(500);
 							} catch (FileNotFoundException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -144,14 +189,16 @@ public class Activity_SavePhoto extends Activity{
 			     			m.what = 0;
 			     			handler.sendMessage(m);
 						}
-	          			
+	          		
 	          		});
 	          		
 	          		mThread.start();	
+	          		}
+	          		
 				}else{
 					Toast.makeText(context, "SDCard not ready !!", Toast.LENGTH_SHORT).show();
 				}
-					
+				}
 				
 			}
 			

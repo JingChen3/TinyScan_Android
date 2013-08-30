@@ -54,6 +54,7 @@ public class FloatDrawable extends Drawable {
 		Paint paint = new Paint();
 		paint.setStyle(Paint.Style.STROKE);
 		paint.setAntiAlias(true);
+		//paint.setColor(Color.rgb(94, 146, 232));
 		paint.setColor(Color.WHITE);
 		paint.setStrokeWidth(5);
 		path.moveTo(left.x, left.y);

@@ -71,16 +71,18 @@ public class Activity_CameraPreview extends Activity {
 	
 	
 	private ImageView takepicture, single, photos, light;
-	private ProgressBar pb;
+	
 	
 	private SharedPreferences preferences;
 	private SharedPreferences.Editor editor;
 	private boolean isSingle;
 	String path;
 	public static int camerawidth, cameraheight;
-	int islight = 1;
+	int islight = 2;
 	CloseReceiver closeReceiver;
 	IntentFilter intentFilter;
+	List<String> focuslist;
+	boolean canfocus = false;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +95,7 @@ public class Activity_CameraPreview extends Activity {
         intentFilter = new IntentFilter("com.tinyscan.CloseReceiver");
         registerReceiver(closeReceiver, intentFilter);
         preferences = getSharedPreferences("MyTinyScan", MODE_PRIVATE);	
+        islight = preferences.getInt("flash", 2);
         editor = preferences.edit();
         isSingle = preferences.getBoolean("single", true);
         fl = (FrameLayout)findViewById(R.id.previewlayout);
@@ -119,7 +122,7 @@ public class Activity_CameraPreview extends Activity {
 			}
         	
         });
-        pb = (ProgressBar)findViewById(R.id.takephoto_progress);
+     
      
         photos = (ImageView)findViewById(R.id.photos);
         photos.setOnClickListener(new OnClickListener(){
@@ -160,22 +163,7 @@ public class Activity_CameraPreview extends Activity {
     }
    
     
-    Handler handler = new Handler(){   
-		public void handleMessage(Message msg) {   
-		switch (msg.what) {   
-		case 1:   
-		
-		     break;
-		case 0:
-			finish();
-			pb.setVisibility(4);
-			Toast.makeText(context, "Save Success !!", Toast.LENGTH_SHORT).show();
-			
-			break;
-		}   
-		super.handleMessage(msg);   
-	}   
-	};  
+   
     
     
     @Override
@@ -228,6 +216,7 @@ public class Activity_CameraPreview extends Activity {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			
 		} 
         return getPicFromBytes(mContent); 
             
@@ -306,25 +295,20 @@ public class Activity_CameraPreview extends Activity {
 				}
 				break;
 			case R.id.light:
-				if(islight == 1){
+				if(islight == 3){
 					light.setImageResource(R.drawable.flash_selector);
-					Parameters p = mCamera.getParameters();
-					p.setFlashMode(Parameters.FLASH_MODE_ON);
-					mCamera.setParameters(p);
+					
+					editor.putInt("flash", 2);
+					editor.commit();
+					
 					islight = 2;
 				}else if(islight == 2){
 					light.setImageResource(R.drawable.flash_selector2);
-					Parameters p = mCamera.getParameters();
-					p.setFlashMode(Parameters.FLASH_MODE_OFF);
-					mCamera.setParameters(p);
-					islight = 3;
-				}else if(islight == 3){
-					light.setImageResource(R.drawable.flash_selector3);
-					Parameters p = mCamera.getParameters();
-					p.setFlashMode(Parameters.FLASH_MODE_AUTO);
-					mCamera.setParameters(p);
 					
-					islight = 1;
+					
+					editor.putInt("flash", 3);
+					editor.commit();
+					islight = 3;
 				}
 				break;
 			default:
@@ -338,17 +322,34 @@ public class Activity_CameraPreview extends Activity {
         // Log.e(TAG, "==takePicture=="); 
         if (mCamera != null) { 
             // ×Ô¶¯¶Ô½¹ 
+        	if(islight == 2){
+    			Parameters p = mCamera.getParameters();
+    			p.setFlashMode(Parameters.FLASH_MODE_ON);
+    			mCamera.setParameters(p);
+    		
+    		}else if(islight == 3){
+    			Parameters p = mCamera.getParameters();
+    			
+    			p.setFlashMode(Parameters.FLASH_MODE_OFF);
+    			mCamera.setParameters(p);
+    			
+    		}
+        	if(canfocus){
         	mCamera.autoFocus(new AutoFocusCallback() { 
                 @Override 
                 public void onAutoFocus(boolean success, Camera camera) { 
                    
                   if (success) { 
                 	
-                    	//camera.takePicture( shutterCallback,rawCallback,jpegCallback);
-                    	camera.takePicture( null,null,jpegCallback);
+                    	camera.takePicture( null,rawCallback,jpegCallback);
+                    	
                    } 
                 } 
             }); 
+        	}else{
+        		mCamera.takePicture( null,rawCallback,jpegCallback);
+        	}
+        	
         } 
     } 
     
@@ -393,22 +394,24 @@ public class Activity_CameraPreview extends Activity {
        
         mCamera = Camera.open();       
         mPreview.setCamera(mCamera);
-        if(islight == 1){
-        	Parameters p = mCamera.getParameters();
-			p.setFlashMode(Parameters.FLASH_MODE_AUTO);
-			mCamera.setParameters(p);
+        Parameters p = mCamera.getParameters();
+        focuslist = p.getSupportedFocusModes();
+        for(int i=0; i<focuslist.size(); i++){
+        	if(focuslist.get(i).equals(Parameters.FOCUS_MODE_AUTO)){
+        		canfocus = true;
+        		p.setFocusMode(Parameters.FOCUS_MODE_AUTO);
+        		mCamera.setParameters(p);
+        		return;
+        	}
+        }
+        islight = preferences.getInt("flash", 2);
+        if(islight == 2){
 			
-			
-		}else if(islight == 2){
-			Parameters p = mCamera.getParameters();
-			p.setFlashMode(Parameters.FLASH_MODE_ON);
-			mCamera.setParameters(p);
-			
+			light.setImageResource(R.drawable.flash_selector);
 			
 		}else if(islight == 3){
-			Parameters p = mCamera.getParameters();
-			p.setFlashMode(Parameters.FLASH_MODE_OFF);
-			mCamera.setParameters(p);
+			
+			light.setImageResource(R.drawable.flash_selector2);
 		}
         File[] mFile = getExternalCacheDir().listFiles();
 		for(int i=0; i<mFile.length; i++){
@@ -476,8 +479,7 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 		
 		memorysize = activityManager.getLargeMemoryClass();
-        //memorysize = activityManager.getMemoryClass();
-		Log.e("sad", memorysize+"");
+       
 		photosize = memorysize*300000/8;
 		if(photosize<=9000000){
 			

@@ -11,12 +11,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-
-
 import jp.co.cyberagent.android.gpuimage.extension.GPUImageWrapper;
-
-import com.appxy.tinyscan.Activity_CameraPreview.CloseReceiver;
 import com.appxy.tools.BitmapTools;
 import com.appxy.tools.CropImageView3;
 import com.appxy.tools.LibImgFun;
@@ -26,6 +21,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -33,58 +29,52 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.Bitmap.CompressFormat;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.LinearLayout.LayoutParams;
 
 public class Activity_Detect extends Activity{
 	
-	Point left, top, right, bottom;
-	int[] srcData, data;
-	String path;
-	
-	
-	Context context;
-	CropImageView3 mCropImage;
-	LinearLayout ll;
-	ImageView full, cancel, save, rotate;
-	boolean isfull = false;
-	int degree = 0;
-	PopupWindow popupWindow;
-	TextView sizeText;
-	ImageView sizeImage;
-	boolean isRunning = false;
-	Thread mThread;
-	float scale1 = 1f;
-	Bitmap bitmap;
-	ProgressDialog progressDialog;
-	ArrayList<HashMap<String,Object>> mlist;
-	HashMap<String, Object> hm;
-	int[] sizes;
-	String[] sizes2;
-	SharedPreferences preferences;
-	CloseReceiver closeReceiver;
-	IntentFilter intentFilter;
-	int id;
+	private Point left, top, right, bottom;
+	private int[] srcData, data;
+	private String path;
+	private Context context;
+	private CropImageView3 mCropImage;
+	private LinearLayout ll;
+	private ImageView full, cancel, save, rotate;
+	private boolean isfull = false;
+	private int degree = 0;
+	private TextView sizeText;
+	private boolean isRunning = false;
+	private Thread mThread;
+	private float scale1 = 1f;
+	private Bitmap bitmap;
+	private ProgressDialog progressDialog;
+	private ArrayList<HashMap<String,Object>> mlist;
+	private HashMap<String, Object> hm;
+	private int[] sizes;
+	private String[] sizes2;
+	private SharedPreferences preferences;
+	private CloseReceiver closeReceiver;
+	private IntentFilter intentFilter;
+	private int id;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -98,14 +88,20 @@ public class Activity_Detect extends Activity{
         registerReceiver(closeReceiver, intentFilter);
 		mlist = new ArrayList<HashMap<String,Object>>();
 		preferences = getSharedPreferences("MyTinyScan", MODE_PRIVATE);
-		id = preferences.getInt("pagesize", 0);
+		id = preferences.getInt("pagesize", 1);
 		MyApplication.sizeid = id;
 		sizes = new int[]{R.drawable.size_letter, R.drawable.size_a4, R.drawable.size_legal, R.drawable.size_a3, R.drawable.size_a5, R.drawable.size_business};
-		sizes2 = new String[]{"Letter", "A4", "Legal", "A3", "A5", "Card"};
+		sizes2 = new String[]{"Letter", "A4", "Legal", "A3", "A5", "Business Card"};
 		for(int i =0; i<6; i++){
 			hm = new HashMap<String, Object>();
 		    hm.put("image", sizes[i]);
 		    hm.put("size", sizes2[i]);
+		    if(i == MyApplication.sizeid){
+		    	hm.put("selected", true);	
+		    }else{
+		    	 hm.put("selected", false);
+		    }
+		   
 		    mlist.add(hm);
 		}
 		
@@ -114,9 +110,10 @@ public class Activity_Detect extends Activity{
 		ll = (LinearLayout)findViewById(R.id.detect_image_layout);
 		
 		sizeText = (TextView)findViewById(R.id.detect_sizeText);
+		sizeText.setOnClickListener(mListener);
+		sizeText.setOnTouchListener(mlistener2);
 		sizeText.setText(sizes2[id]);
-		sizeImage = (ImageView)findViewById(R.id.detect_sizeImage);
-		sizeImage.setOnClickListener(mListener);
+		
 		full = (ImageView)findViewById(R.id.detect_full);
 		full.setOnClickListener(mListener);
 		cancel = (ImageView)findViewById(R.id.detect_cancel);
@@ -125,7 +122,7 @@ public class Activity_Detect extends Activity{
 		rotate.setOnClickListener(mListener);
 		save = (ImageView)findViewById(R.id.detect_save);
 		save.setOnClickListener(mListener);
-       
+	
 		getCropImage();
 	}
 	
@@ -202,10 +199,34 @@ public class Activity_Detect extends Activity{
 					MyApplication.degree = degree%360;
 					startActivity(i);
 					break;
-				case R.id.detect_sizeImage:
-					initPopuptWindow();
+				case R.id.detect_sizeText:
+				
+					final View view = getLayoutInflater().inflate(R.layout.pagesize2, null);
 					
-					popupWindow.showAtLocation(v,Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 0);
+					final AlertDialog mDialog = new AlertDialog.Builder(context).setTitle("Set page size").setView(view).setNegativeButton("Cancel", null).create();
+					mDialog.show();
+					
+					ListView lv = (ListView)view.findViewById(R.id.pagesize_list);
+					final PageSizeAdapter adapter = new PageSizeAdapter(context, mlist);
+					lv.setAdapter(adapter);
+					lv.setOnItemClickListener(new OnItemClickListener(){
+
+						@Override
+						public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+								long arg3) {
+							// TODO Auto-generated method stub
+							sizeText.setText(sizes2[arg2]);
+							MyApplication.sizeid = arg2;
+							for(int i=0; i<6; i++){
+								mlist.get(i).put("selected", false);
+							}
+							mlist.get(arg2).put("selected", true);
+							adapter.notifyDataSetChanged();
+							mDialog.dismiss();
+						}
+						
+					});
+					
 					break;
 				
 				default:
@@ -217,7 +238,20 @@ public class Activity_Detect extends Activity{
 		
 	};
 	
-	
+	OnTouchListener mlistener2 = new OnTouchListener(){
+
+		@Override
+		public boolean onTouch(View arg0, MotionEvent arg1) {
+			// TODO Auto-generated method stub
+			if(arg1.getAction() == MotionEvent.ACTION_DOWN){
+				arg0.setBackgroundColor(Color.rgb(34, 94, 154));
+			}else if(arg1.getAction() == MotionEvent.ACTION_UP){
+				arg0.setBackgroundColor(Color.TRANSPARENT);
+			}
+			return false;
+		}
+		
+	};
 	
 	
 	public double isRect(Point p1, Point p2, Point p3) 
@@ -271,7 +305,13 @@ public class Activity_Detect extends Activity{
 		          		File caheDirectory = getExternalCacheDir();
 						File tempFile = File.createTempFile( time2, ".temp", caheDirectory);
 					    OutputStream out = null;
-	         			out = new BufferedOutputStream(new FileOutputStream(tempFile));			
+	         			out = new BufferedOutputStream(new FileOutputStream(tempFile));	
+	         			if(MyApplication.nowbitmap != null){
+	         				
+	         			}else{
+	         				finish();
+	         			}
+	         			
 	         			Bitmap bm = BitmapTools.resizeImage(MyApplication.nowbitmap);
 	         			
 	         			Bitmap bm2 = GPUImageWrapper.processRGBClosing(context, 4, bm);
@@ -300,7 +340,7 @@ public class Activity_Detect extends Activity{
 						
 					}catch(Exception e){
 						e.printStackTrace();
-						
+						finish();
 					}
 					
 					Message m = new Message();
@@ -323,7 +363,7 @@ public class Activity_Detect extends Activity{
 
 			progressDialog.dismiss();
 			isRunning =false;
-			
+			Log.e("sad", MyApplication.nowbitmap.getWidth()+"");
 			float scale = MyApplication.nowbitmap.getWidth()/320.0f;
 			
 			
@@ -402,43 +442,7 @@ public class Activity_Detect extends Activity{
     };
     
     
-    
-    public void initPopuptWindow() {  
-		// TODO Auto-generated method stub  
-		  
-		// 获取自定义布局文件pop.xml的视图 
-		if(popupWindow != null){
-			popupWindow = null;
-		}
-		final View popupWindow_view = getLayoutInflater().inflate(R.layout.pagesize_pop, null,  false);  
-		
-		// 创建PopupWindow实例
-		DisplayMetrics dm = new DisplayMetrics();   
-		getWindowManager().getDefaultDisplay().getMetrics(dm);
-		float mScreenWidth = dm.widthPixels;
-		int mwidth = (int)mScreenWidth*4/5;
-		float mScreenHeight = dm.heightPixels;
-		int mheight = (int)mScreenHeight*3/5;
-		popupWindow = new PopupWindow(popupWindow_view,  mwidth, mheight,true);  
-		popupWindow.setBackgroundDrawable(new BitmapDrawable());
-		
-		ListView lv = (ListView)popupWindow_view.findViewById(R.id.pagesize_list);
-		PageSizeAdapter adapter = new PageSizeAdapter(context, mlist);
-		lv.setAdapter(adapter);
-		lv.setOnItemClickListener(new OnItemClickListener(){
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				// TODO Auto-generated method stub
-				sizeText.setText(sizes2[arg2]);
-				MyApplication.sizeid = arg2;
-				popupWindow.dismiss();
-				popupWindow = null;
-			}
-			
-		});
-	}
+ 
 
 
 

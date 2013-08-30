@@ -96,7 +96,7 @@ public class ListAdapter extends BaseAdapter{
       
         int num  = minfo.getImage_num();
         if(mlist2.get(position).isCheck()){
-        	listItemView.ll.setBackgroundColor(Color.rgb(56, 152, 250));
+        	listItemView.ll.setBackgroundColor(Color.rgb(165, 230, 255));
         	
         }else{
         	listItemView.ll.setBackgroundColor(Color.TRANSPARENT);
@@ -109,7 +109,12 @@ public class ListAdapter extends BaseAdapter{
 	    }else{
 	    loadBitmap(image_Path,listItemView.image, name);
 	    }
-	    listItemView.other.setText(minfo.getTime()+"  "+num +"pages");
+	    if(num == 1){
+	    	 listItemView.other.setText(minfo.getTime()+"  "+num +" page");
+	    }else{
+	    	 listItemView.other.setText(minfo.getTime()+"  "+num +" pages");	
+	    }
+	   
 	   
         
         listItemView.name.setText(name);   

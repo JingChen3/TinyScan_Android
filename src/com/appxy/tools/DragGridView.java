@@ -7,6 +7,7 @@ import android.graphics.PixelFormat;
 import android.app.Activity;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,7 +32,7 @@ public class DragGridView extends GridView {
     private int dragPointx;
     private int upScrollBounce;
     private int downScrollBounce;
- 
+    private int clickid;
   
     Context context;
     
@@ -69,7 +70,7 @@ public class DragGridView extends GridView {
             
            
             startPosition = dropPosition = dragPosition = pointToPosition(x, y); 
-          
+            
             if (dragPosition == AdapterView.INVALID_POSITION) { 
             	
                 return super.onInterceptTouchEvent(ev); 
@@ -77,17 +78,18 @@ public class DragGridView extends GridView {
             } 
             final ViewGroup itemView = (ViewGroup) getChildAt(dragPosition 
                     - getFirstVisiblePosition()); 
-            
+            clickid = dragPosition ;
 		   
             dragPoint = y - itemView.getTop(); 
             dragPointx = x - itemView.getLeft();
             dragOffset = (int) (ev.getRawY() - y); 
             dragOffsetx = (int) (ev.getRawX() - x); 
-           ImageView dragger = (ImageView)itemView.findViewById(R.id.listphoto_photo);
+            ImageView dragger = (ImageView)itemView.findViewById(R.id.listphoto_photo);
            
           
             if(dragger!=null){
-          
+            	
+            	
             	dragger.setOnLongClickListener(new OnLongClickListener(){
 
 				@Override
@@ -118,7 +120,9 @@ public class DragGridView extends GridView {
             
            
             }else  if (ev.getAction() == MotionEvent.ACTION_UP){
+              
                if (dragImageView != null && dragPosition != INVALID_POSITION){
+            	  
             	if(flag){
             	   stopDrag(); 
                    onDrop(x, y); 
@@ -126,6 +130,7 @@ public class DragGridView extends GridView {
             	}
                }
             }else  if (ev.getAction() == MotionEvent.ACTION_MOVE){
+            	 
             	 if (dragImageView != null && dragPosition != INVALID_POSITION){
                        onDrag(x,y); 
 				       if(!isMoving )

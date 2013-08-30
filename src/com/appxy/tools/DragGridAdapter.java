@@ -16,8 +16,10 @@ import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 
 import android.widget.AbsListView;
@@ -34,6 +36,7 @@ public  class DragGridAdapter extends ArrayAdapter<String>{
 	 private boolean ShowItem = false;
 	 DragGridAdapter adapter = this;
 	 int width, height;
+	 int oldx, oldy;
     public DragGridAdapter(Context context,  List<String> objects, int width, int height) {
         super(context, 0, objects);
         this.context =context;
@@ -57,6 +60,42 @@ public  class DragGridAdapter extends ArrayAdapter<String>{
         
         String photo_path = mlist.get(position);
         ImageView imageview = (ImageView)view.findViewById(R.id.listphoto_photo);
+        imageview.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				MyApplication.islist = true;
+				MyApplication.listitemid = position;
+				((Activity) context).finish();
+			}
+        	
+        });
+        imageview.setOnTouchListener(new OnTouchListener(){
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				// TODO Auto-generated method stub
+				int x = (int) event.getX();
+				int y = (int) event.getY();
+				if(event.getAction() == MotionEvent.ACTION_DOWN){
+					oldx = x; 
+					oldy = y;
+					v.setBackgroundResource(R.drawable.paper_shadow5);
+				}else if(event.getAction() == MotionEvent.ACTION_UP){
+					v.setBackgroundResource(R.drawable.list_photo_bg);
+				}
+				else if(event.getAction() == MotionEvent.ACTION_MOVE){
+					
+					if(Math.abs(x - oldx) > 20 || Math.abs(y- oldy) > 20){
+						v.setBackgroundResource(R.drawable.list_photo_bg);
+					}
+					
+				}
+				return false;
+			}
+        	
+        });
         TextView num = (TextView)view.findViewById(R.id.listphoto_text);
         int number = position+1;
         num.setText(number+"");
@@ -112,6 +151,7 @@ public  class DragGridAdapter extends ArrayAdapter<String>{
 	}
 	
 	public void update(int start, int down) { 
+		MyApplication.islistchanged = true;
 		holdPosition = down;
 		String startpath = mlist.get(start);
 		if(start < down){

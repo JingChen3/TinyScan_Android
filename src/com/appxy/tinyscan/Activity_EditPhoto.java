@@ -1,7 +1,6 @@
 package com.appxy.tinyscan;
 
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
-import it.sephiroth.android.library.imagezoom.ImageViewTouchBase;
 import it.sephiroth.android.library.imagezoom.ImageViewTouchBase.DisplayType;
 
 import java.io.BufferedOutputStream;
@@ -18,7 +17,6 @@ import java.util.List;
 import com.appxy.tools.BitmapTools;
 import com.appxy.tools.FoldernameAdapter;
 import com.appxy.tools.MyViewPager;
-import com.appxy.tools.Photo_info;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
@@ -38,6 +36,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.drawable.BitmapDrawable;
@@ -51,7 +50,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -87,8 +85,8 @@ public class Activity_EditPhoto extends Activity{
     private File[] files;  
     public static  List<String> mlist;
    
-   Thread mThread;
-    private float degree = 0f;
+    Thread mThread;
+  
    
     Bitmap bm;
     float oldX, oldY;
@@ -96,7 +94,11 @@ public class Activity_EditPhoto extends Activity{
     ImageViewTouch image;
     ArrayList<String> namelist;
     int mwidth, mheight;
-    
+    DisplayMetrics metrics;
+    LayoutInflater inflater;
+    boolean isNew = false;
+    boolean isRun = false;
+    Bitmap bitmap;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -104,11 +106,13 @@ public class Activity_EditPhoto extends Activity{
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.edit_photo);
 		context = this;
-		
-		DisplayMetrics metrics = new DisplayMetrics();
+		inflater = LayoutInflater.from(context);
+		metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		Log.e("sad", metrics.density+"");
 		mwidth = metrics.widthPixels;
-		mheight = metrics.heightPixels - 200;
+		
+		mheight = metrics.heightPixels - MyApplication.stateheight;
 		
 		mlist = new ArrayList<String>();
 		
@@ -136,59 +140,67 @@ public class Activity_EditPhoto extends Activity{
 
 			@Override
 			public void onClick(View arg0) {
-				
-				pb.setVisibility(0);
-				View view = mPager.findViewWithTag(mlist.get(num-1));
-				image = (ImageViewTouch)view.findViewById(R.id.photo);
-				
-				
-				new Thread(new Runnable(){
-
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						
-						Matrix imageMatrix = new Matrix();
-						imageMatrix.postRotate(90);
-						Log.e("sad", degree+90+"");
-						
-						
-						Bitmap bitmap2 = BitmapFactory.decodeFile(mlist.get(num-1));
-						
-						Bitmap bm2 = Bitmap.createBitmap(bitmap2, 0, 0, bitmap2.getWidth(), bitmap2.getHeight(), imageMatrix, true);
-						bitmap2.recycle();
-						File file = new File(mlist.get(num-1));
-						OutputStream out = null;
-                        try {
-							out = new BufferedOutputStream(new FileOutputStream(file));
-							bm2.compress(CompressFormat.JPEG, 85, out);
-							out.flush();
-							out.close();
-							
-						} catch (FileNotFoundException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} 
-                        bm2.recycle();
-                        Bitmap bitmap = BitmapFactory.decodeFile(mlist.get(num-1));
-                        bm = BitmapTools.resizeImage2(bitmap,mwidth-80, mheight-80);
-                        bitmap.recycle();
-						Message m = new Message();
-						m.what = 1;
-						handler.sendMessage(m);
-					}
+				if(isRun){
 					
-				}).start();
+				}else{
+					
+					System.gc();
+					pb.setVisibility(0);
+					View view = mPager.findViewWithTag(mlist.get(num-1));
+					image = (ImageViewTouch)view.findViewById(R.id.photo);
+					
+					
+					new Thread(new Runnable(){
+
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+							isRun = true;
+							Matrix imageMatrix = new Matrix();
+							imageMatrix.postRotate(90);
+							
+							Bitmap bitmap2 = BitmapFactory.decodeFile(mlist.get(num-1));
+							
+							Bitmap bm2 = Bitmap.createBitmap(bitmap2, 0, 0, bitmap2.getWidth(), bitmap2.getHeight(), imageMatrix, true);
+							
+							File file = new File(mlist.get(num-1));
+							
+							OutputStream out = null;
+	                        try {
+								out = new BufferedOutputStream(new FileOutputStream(file));
+								bm2.compress(CompressFormat.JPEG, 85, out);
+								out.flush();
+								out.close();
+								
+							} catch (FileNotFoundException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} 
+	                        bitmap2.recycle();
+	                        bm2.recycle();
+	                        bitmap2 = null;
+	                        bm2 = null;
+	                        bitmap = BitmapFactory.decodeFile(mlist.get(num-1));
+	                        bm = BitmapTools.resizeImage2(bitmap,mwidth-80, mheight-120);
+	                       // bitmap.recycle();
+							Message m = new Message();
+							m.what = 1;
+							handler.sendMessage(m);
+						}
+						
+					}).start();
+				}
+				
 				
 			}
 			
 		});
 		
-		move = (ImageView)findViewById(R.id.edit_photo_move);
-		move.setOnClickListener(mlistener2);
+		//move = (ImageView)findViewById(R.id.edit_photo_move);
+		//move.setOnClickListener(mlistener2);
 		
 		photo_path = root_Path + MyApplication.folder_path;
 		
@@ -200,15 +212,16 @@ public class Activity_EditPhoto extends Activity{
 		documentname.setText(folder_name);
 		File mFile = new File(photo_path);
 		files = mFile.listFiles();
-		
+		String pattern = "[0-9]{18}.jpg";
 		for(int i=0; i<files.length; i++){
-		   
+		   if(files[i].getName().matches(pattern)){
 			mlist.add(files[i].getPath());
+		   }
 		}
 		Collections.sort(mlist,comparator);
 		other.setText(num +"/"+mlist.size());
 		mPager.setAdapter(mAdapter);
-	    
+		
 		mPager.setOnPageChangeListener(new OnPageChangeListener(){
 
 			@Override
@@ -230,8 +243,8 @@ public class Activity_EditPhoto extends Activity{
 				
 				num = arg0+1;
 				other.setText(num +"/"+mlist.size());				
-				degree = 0f;
-				Log.e("sad", mlist.get(num-1));
+				
+				
 			}
 	    	
 	    });
@@ -255,15 +268,16 @@ public class Activity_EditPhoto extends Activity{
 	
 		case 1:
 			pb.setVisibility(4);
+			isRun = false;
 			image.setImageBitmap(bm);			
-			degree+=90f;
+			
      	
      		break;
 		case 3:
 			progressDialog.dismiss();
 			mThread = null;
 			Toast.makeText(context, "Convert Success!!", Toast.LENGTH_SHORT).show();
-			File file = new File(root_Path2+"MyTinyScan.pdf");
+			File file = new File(root_Path2+MyApplication.folder_path+".pdf");
 			Intent mailIntent=new Intent(Intent.ACTION_SEND);
 			mailIntent.putExtra(Intent.EXTRA_SUBJECT, "TinyScan");
 			mailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
@@ -294,19 +308,33 @@ public class Activity_EditPhoto extends Activity{
 			
 			switch(arg0.getId()){
 			case R.id.edit_photo_back:
+				if(isRun){
+					
+				}else{
+					finish();
+				}
 				
-				finish();
 				break;
 			case R.id.edit_photo_list:
-				Intent intent2 = new Intent(context, Activity_ListPhotos.class);
-				intent2.putExtra("folder_name", folder_name);
-				intent2.putExtra("photo_path", photo_path);
-				intent2.putStringArrayListExtra("mlist", (ArrayList<String>) mlist);				
-				startActivityForResult(intent2, 0);
+				if(isRun){
+					
+				}else{
+					Intent intent2 = new Intent(context, Activity_ListPhotos.class);
+					intent2.putExtra("folder_name", folder_name);
+					intent2.putExtra("photo_path", photo_path);
+					intent2.putStringArrayListExtra("mlist", (ArrayList<String>) mlist);				
+					startActivityForResult(intent2, 0);
+				}
+				
 				
 				break;
 			case R.id.edit_photo_delete:
-				Dialog alertDialog = new AlertDialog.Builder(context). 
+				if(isRun){
+					
+				}else{
+					
+				
+				Dialog alertDialog = new AlertDialog.Builder(context).setTitle("Delete this page"). 
 	            setMessage("Are you sure ?").setPositiveButton("Yes", new DialogInterface.OnClickListener(){
 	            	 @Override 
 	                 public void onClick(DialogInterface dialog, int which) { 
@@ -367,21 +395,39 @@ public class Activity_EditPhoto extends Activity{
 	             }).
 	            create(); 
 	            alertDialog.show(); 
+				}
 				break;
 			
 			case R.id.edit_photo_takephoto:
-				MyApplication.where = true;
-				MyApplication.addpath = photo_path;
-				Intent addintent = new Intent(context, Activity_CameraPreview.class);
-				startActivity(addintent);
+				if(isRun){
+					
+				}else{
+					MyApplication.where = true;
+					MyApplication.addpath = photo_path;
+					Intent addintent = new Intent(context, Activity_CameraPreview.class);
+					startActivity(addintent);	
+				}
+				
 				
 				break;
 			
-			case R.id.edit_photo_move:
-				
+			/*case R.id.edit_photo_move:
+				isNew = false;
 				File file = new File(root_Path);
 				File[] mFile = file.listFiles();
+				int j = 1;
+				String newpath = "";
+				File mfile = new File(root_Path +"New Document");
+				if(mfile.exists()){
+					while(new File(root_Path+"New Document("+j+")").exists()){
+						j+=1;
+					}
+					newpath = "New Document("+j+")";
+				}else{
+					newpath = "New Document";
+				}
 				namelist = new ArrayList<String>();
+				//namelist.add(newpath);
 				for(int i=0; i <mFile.length; i++){
 					if(mFile[i].getName().equals(folder_name)){
 						
@@ -389,20 +435,138 @@ public class Activity_EditPhoto extends Activity{
 						namelist.add(mFile[i].getName());
 					}
 				}
+				Collections.sort(namelist,comparator2);
+				namelist.add(0, newpath);
+					final View view = inflater.inflate(R.layout.move, null);
+					final AlertDialog mDialog = new AlertDialog.Builder(context).setTitle("Move To").setView(view).create();
+					mDialog.show();
+					ListView lv = (ListView)view.findViewById(R.id.move_list2);
+					FoldernameAdapter adapter = new FoldernameAdapter(context, namelist);
+					lv.setAdapter(adapter);
+					lv.setOnItemClickListener(new OnItemClickListener(){
+
+						@Override
+						public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+								long arg3) {
+							// TODO Auto-generated method stub
+							
+							
+							
+							MyApplication.isUpdate = true;
+							File file = new File(mlist.get(num-1));
+							
+							String size = file.getName().substring(14, 15);
+						
+							File file2 = new File(root_Path + namelist.get(arg2));	
+                            if(file2.exists()){
+								
+							}else{
+								file2.mkdir();
+								isNew = true;
+							}
+							String[] name = file2.list();
+							String id="";
+							int id2 = 0;
+							if(isNew){
+								if(Activity_Main.getBitmapFromMemCache(namelist.get(arg2))!=null){
+									Activity_Main.mMemoryCache.remove(namelist.get(arg2));
+								}
+							}else{
+								BitmapTools.sort(name);
+								id2 = Integer.parseInt(name[name.length-1].substring(15, 18)) + 1;
+							}
+							
+							
+							
+							if(id2<10){
+								id="00"+id2;
+							}else if(id2<100){
+								id="0"+id2;
+							}else{
+								id=""+id2;
+							}
+							String name2 = null;
+                            if(isNew){
+                            	Timestamp time = new Timestamp(System.currentTimeMillis());
+    			          		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss"); 
+    			          		String time2 = sdf.format(time);
+    			          		
+                            	name2 = root_Path + namelist.get(arg2) + "/" +  time2.substring(0, 14) + size + id + ".jpg";
+							}else{
+								name2 = root_Path + namelist.get(arg2) + "/" + name[0].substring(0, 14) + size + id + ".jpg";
+							}
+							file.renameTo(new File(name2));	
+							File mfile = new File(photo_path);
+							files = mfile.listFiles();
+							if(files.length<1){
+								mfile.delete();
+								Activity_Main.mlist2.remove(MyApplication.folder_id);
+								
+							}else{
+								mlist.remove(num-1);
+								Collections.sort(mlist,comparator);
+			            		//Activity_Main.mlist2.get(MyApplication.folder_id).setImage_name(mlist.get(0));
+			            		if(num == 1){
+			            			if(Activity_Main.mMemoryCache.get(MyApplication.folder_path) != null){
+			            				Activity_Main.mMemoryCache.remove(MyApplication.folder_path);
+			            				String[] name3 = mlist.get(0).split("/");
+			            				Activity_Main.mlist2.get(MyApplication.folder_id).setName(MyApplication.folder_path);
+			            				Activity_Main.mlist2.get(MyApplication.folder_id).setImage_name(name3[name3.length-1]);
+			            			}
+			            		}
+								Activity_Main.mlist2.get(MyApplication.folder_id).setImage_num(Activity_Main.mlist2.get(MyApplication.folder_id).getImage_num()-1);
+							}
+							if(isNew){
+								 String[] newname = file2.list();
+								 Photo_info minfo = new Photo_info(namelist.get(arg2),newname[0].substring(0, 4)+"-"+newname[0].substring(4, 6)+"-"+newname[0].substring(6, 8),1,newname[0], false);
+					     		 Activity_Main.mlist2.add(minfo);
+					     		 if(Activity_Main.sort_type == 0){
+					     			  Collections.sort(Activity_Main.mlist2, Activity_Main.comparator);
+					     		 }else{
+					     			  Collections.sort(Activity_Main.mlist2, Activity_Main.comparator2);
+					     		 }
+					     		    
+					     		 MyApplication.folder_path = namelist.get(arg2);
+					     		 MyApplication.folder_id = Activity_Main.mlist2.indexOf(minfo);
+					     		 
+							}else{
+								MyApplication.folder_path = namelist.get(arg2);
+								MyApplication.folder_id = Activity_Main.findIdByName(namelist.get(arg2));
+							   
+							    Activity_Main.mlist2.get(MyApplication.folder_id).setImage_num(Activity_Main.mlist2.get(MyApplication.folder_id).getImage_num()+1);
+							}
+							
+							photo_path = root_Path + MyApplication.folder_path;
+						    folder_name = MyApplication.folder_path;
+							documentname.setText(namelist.get(arg2));
+							mlist.clear();
+							File mFile = new File(photo_path);
+							files = mFile.listFiles();
+							
+							for(int i=0; i<files.length; i++){
+							   
+								mlist.add(files[i].getPath());
+							}
+							Collections.sort(mlist,comparator);			
+						    mPager.setAdapter(mAdapter);
+						    mPager.setCurrentItem(mlist.size()-1);
+						    if(isNew){
+						    	other.setText("1/1");	
+						    }
+						    isNew = false;
+							Toast.makeText(context, "Move Success!!", Toast.LENGTH_SHORT).show();
+							mDialog.dismiss();
+						}
+						
+					});
 				
-				if(namelist.size()>0){
-				initPopuptWindow();
-				int [] pos = new int[2];  
-				arg0.getLocationOnScreen(pos);  
 				
-				popupWindow.showAtLocation(arg0,Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 0);
-				}else{
-					Toast.makeText(context, "No other documents", Toast.LENGTH_SHORT).show();
-				}
-				break;
+				break;*/
 			case R.id.edit_photo_share:
 				
-				
+				if(isRun){
+					
+				}else{
 				progressDialog=ProgressDialog.show(context,null,"Converting to PDF...");
 				progressDialog.setCancelable(true);
 				//progressDialog.set
@@ -417,10 +581,18 @@ public class Activity_EditPhoto extends Activity{
 				        	     name5[i].delete();
 				               }
 		     					File file = new File(root_Path + MyApplication.folder_path);
-		     					File[] files = file.listFiles();
-		     					Rectangle msize = null;
-		     					for(int j=0; j<files.length; j++){
-		     						int size = Integer.parseInt(files[j].getName().substring(14,15));
+		     					String[] name = file.list();
+		     					String pattern = "[0-9]{18}.jpg";
+								List<String> namelist = new ArrayList<String>();
+								for(int j=0; j<name.length; j++){
+									if(name[j].matches(pattern)){
+										namelist.add(name[j]);
+									}
+								}
+								Collections.sort(namelist, comparator3);
+		     					Rectangle msize = PageSize.A4;
+		     					for(int j=0; j<namelist.size(); j++){
+		     						int size = Integer.parseInt(namelist.get(j).substring(14,15));
 		     						switch(size){
 		     						case 0:
 		     							msize = PageSize.LETTER;
@@ -438,25 +610,28 @@ public class Activity_EditPhoto extends Activity{
 		     							msize = PageSize.A5;
 		     							break;
 		     						case 5:
-		     							msize = PageSize.POSTCARD;
+		     							msize = new Rectangle(241,156);
 		     							break;
 		     						default:
+		     							msize = PageSize.A4;
 		     							break;
 		     						}
 		     						
 		     						Document document = new Document(msize);
 		    		     			try {
 		    		     				
-		    		     				PdfWriter.getInstance(document, new FileOutputStream(root_Path2+files[j].getName()+".pdf"));			
+		    		     				PdfWriter.getInstance(document, new FileOutputStream(root_Path2+namelist.get(j)+".pdf"));			
 		    		     				document.open();
-		     						    Bitmap bitmap = BitmapFactory.decodeFile(files[j].getPath());
+		     						    Bitmap mbitmap = BitmapFactory.decodeFile(file.getPath()+"/"+namelist.get(j));
 		     						    ByteArrayOutputStream stream = new ByteArrayOutputStream();
 				     				
-		     						    bitmap.compress(Bitmap.CompressFormat.JPEG ,
-				     				                        100 , stream);
+		     						    mbitmap.compress(Bitmap.CompressFormat.JPEG ,
+				     				                        85 , stream);
 				     				    Image jpg = Image.getInstance(stream.toByteArray());
 				     				
-				     				    jpg.scaleToFit(document.getPageSize());
+				     				   if(jpg.getWidth() >=document.getPageSize().getWidth() || jpg.getHeight()>=document.getPageSize().getHeight()){
+				     				    	jpg.scaleToFit(document.getPageSize());
+				     				    }
 				     				
 				     				    //jpg.setAlignment(Image.ALIGN_CENTER);
 				     				    jpg.setAbsolutePosition((document.getPageSize().getWidth()-jpg.getScaledWidth())/2, (document.getPageSize().getHeight()-jpg.getScaledHeight())/2);
@@ -472,12 +647,13 @@ public class Activity_EditPhoto extends Activity{
 		     			} 
 		     			PdfCopyFields copy	= null;
 		     			try {
-							copy = new PdfCopyFields(new FileOutputStream(root_Path2+"MyTinyScan.pdf"));
+							copy = new PdfCopyFields(new FileOutputStream(root_Path2+MyApplication.folder_path+".pdf"));
 							File file6 = new File(root_Path2);
-					        File[] name = file6.listFiles();
-					        for(int i=0; i<name.length; i++){
-					        	PdfReader reader = new PdfReader(name[i].getPath()); 
+					        File[] name2 = file6.listFiles();
+					        for(int i=0; i<name2.length; i++){
+					        	PdfReader reader = new PdfReader(name2[i].getPath()); 
 					        	copy.addDocument(reader);
+					        	new File(name2[i].getPath()).delete();
 					        }
 					       
 						} catch (FileNotFoundException e) {
@@ -501,7 +677,7 @@ public class Activity_EditPhoto extends Activity{
 					
 				});
 				mThread.start();
-				
+				}
 				break;
 			default:
 				break;
@@ -509,6 +685,28 @@ public class Activity_EditPhoto extends Activity{
 		}
 		
 	};
+	
+	Comparator<String> comparator2 = new Comparator<String>(){
+		   public int compare(String s1, String s2) {
+			   String pattern = "New Document\\("+"\\d{1,5}"+"\\)";
+			   if(s1.matches(pattern) && s2.matches(pattern)){
+				  
+				   int num = Integer.parseInt(s1.substring(13, s1.length()-1));
+				   int num2 = Integer.parseInt(s2.substring(13, s2.length()-1));
+				  
+				   return num-num2;
+			   }
+			   return s1.toLowerCase().compareTo(s2.toLowerCase());
+		   }
+   };
+   
+   Comparator<String> comparator3 = new Comparator<String>(){
+	   public int compare(String s1, String s2) {
+		    
+			  return s1.substring(s1.length()-7, s1.length()-4).compareTo(s2.substring(s2.length()-7, s2.length()-4));
+		  
+	   }
+    };
 	
 	PagerAdapter mAdapter = new PagerAdapter(){
 
@@ -543,10 +741,11 @@ public class Activity_EditPhoto extends Activity{
 			((ViewPager) arg0).addView(view);
 			ImageViewTouch imageView = (ImageViewTouch)view.findViewById(R.id.photo);	
 			imageView.setDisplayType( DisplayType.FIT_IF_BIGGER);
-			Bitmap bitmap = BitmapFactory.decodeFile(mlist.get(position));
-			Bitmap bitmap2 = BitmapTools.resizeImage2(bitmap,mwidth-80, mheight-80);
+			bitmap = BitmapFactory.decodeFile(mlist.get(position));
+			bm = BitmapTools.resizeImage2(bitmap,mwidth-80, mheight-120);
 			
-			imageView.setImageBitmap(bitmap2);
+			imageView.setImageBitmap(bm);
+			imageView.setBackgroundColor(Color.rgb(192, 192, 192));
 			return view;
 	    }
      };
@@ -579,117 +778,18 @@ public class Activity_EditPhoto extends Activity{
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
 		if(keyCode==KeyEvent.KEYCODE_BACK){
+			if(isRun){
+				
+			}else{
+				finish();
+			}
 			
-			finish();
 			return true;
 	    }
 		return super.onKeyDown(keyCode, event);
 	}
 	
 	
-	public void initPopuptWindow() {  
-		// TODO Auto-generated method stub  
-		  
-		// 获取自定义布局文件pop.xml的视图 
-		if(popupWindow != null){
-			popupWindow = null;
-		}
-		final View popupWindow_view = getLayoutInflater().inflate(R.layout.move_photo_pop, null,  false);  
-		
-		// 创建PopupWindow实例
-		DisplayMetrics dm = new DisplayMetrics();   
-		getWindowManager().getDefaultDisplay().getMetrics(dm);
-		float mScreenWidth = dm.widthPixels;
-		float mScreenheight = dm.heightPixels;
-		int mwidth = (int)mScreenWidth*9/10;
-		int mheight = (int)mScreenheight/2;
-		if(namelist.size()<=4){
-			popupWindow = new PopupWindow(popupWindow_view,  mwidth,LayoutParams.WRAP_CONTENT,true);
-		}else{
-			popupWindow = new PopupWindow(popupWindow_view,  mwidth,mheight,true);
-		}
-		 
-		
-		popupWindow.setBackgroundDrawable(new BitmapDrawable());
-		ListView mview = (ListView)popupWindow_view.findViewById(R.id.move_photo_list);
-		
-		FoldernameAdapter adapter = new FoldernameAdapter(context, namelist);
-		mview.setAdapter(adapter);
-		mview.setOnItemClickListener(new OnItemClickListener(){
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				// TODO Auto-generated method stub
-				
-				
-				
-				MyApplication.isUpdate = true;
-				File file = new File(mlist.get(num-1));
-				
-				String size = file.getName().substring(14, 15);
-				Log.e("sad", size);
-				File file2 = new File(root_Path + namelist.get(arg2));			
-				String[] name = file2.list();	
-				BitmapTools.sort(name);
-				String id="";
-				int id2 = Integer.parseInt(name[name.length-1].substring(15, 18)) + 1;
-				if(id2<10){
-					id="00"+id2;
-				}else if(id2<100){
-					id="0"+id2;
-				}else{
-					id=""+id2;
-				}
-				String name2 = root_Path + namelist.get(arg2) + "/" + name[0].substring(0, 14) + size + id + ".jpg";
-				file.renameTo(new File(name2));	
-				File mfile = new File(photo_path);
-				files = mfile.listFiles();
-				if(files.length<1){
-					mfile.delete();
-					Activity_Main.mlist2.remove(MyApplication.folder_id);
-					
-				}else{
-					mlist.remove(num-1);
-					Collections.sort(mlist,comparator);
-            		//Activity_Main.mlist2.get(MyApplication.folder_id).setImage_name(mlist.get(0));
-            		if(num == 1){
-            			if(Activity_Main.mMemoryCache.get(MyApplication.folder_path) != null){
-            				Activity_Main.mMemoryCache.remove(MyApplication.folder_path);
-            				String[] name3 = mlist.get(0).split("/");
-            				Activity_Main.mlist2.get(MyApplication.folder_id).setName(MyApplication.folder_path);
-            				Activity_Main.mlist2.get(MyApplication.folder_id).setImage_name(name3[name3.length-1]);
-            			}
-            		}
-					Activity_Main.mlist2.get(MyApplication.folder_id).setImage_num(Activity_Main.mlist2.get(MyApplication.folder_id).getImage_num()-1);
-				}
-				
-				MyApplication.folder_path = namelist.get(arg2);
-				MyApplication.folder_id = Activity_Main.findIdByName(namelist.get(arg2));
-			   
-			    Activity_Main.mlist2.get(MyApplication.folder_id).setImage_num(Activity_Main.mlist2.get(MyApplication.folder_id).getImage_num()+1);
-				photo_path = root_Path + MyApplication.folder_path;
-			    folder_name = MyApplication.folder_path;
-				documentname.setText(namelist.get(arg2));
-				mlist.clear();
-				File mFile = new File(photo_path);
-				files = mFile.listFiles();
-				
-				for(int i=0; i<files.length; i++){
-				   
-					mlist.add(files[i].getPath());
-				}
-				Collections.sort(mlist,comparator);			
-			    mPager.setAdapter(mAdapter);
-			    mPager.setCurrentItem(mlist.size()-1);
-				Toast.makeText(context, "Move Success!!", Toast.LENGTH_SHORT).show();
-				popupWindow.dismiss();
-			}
-			
-		});
-		
-		
-	}
 	
 	
 	
@@ -702,11 +802,14 @@ public class Activity_EditPhoto extends Activity{
 			mFile.delete();
 			finish();
 		}else{
-		  
+			String pattern = "[0-9]{18}.jpg";
 			for(int i=0; i<files.length; i++){
-				
-				mlist.add(files[i].getPath());
+				 if(files[i].getName().matches(pattern)){
+					mlist.add(files[i].getPath());
+				}
 			}
+			
+			
 			Collections.sort(mlist,comparator);
 			mPager.setAdapter(mAdapter);
 			num = 1;
@@ -727,7 +830,11 @@ public class Activity_EditPhoto extends Activity{
 			  MyApplication.isUpdate = true;
 			  MyApplication.isAdd = false;
 		}
-		
+		if(MyApplication.islist){
+			MyApplication.islist = false;
+			mPager.setCurrentItem(MyApplication.listitemid,true);
+			
+		}
 		
 	}
 

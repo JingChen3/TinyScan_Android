@@ -5,20 +5,19 @@ import it.sephiroth.android.library.imagezoom.ImageViewTouchBase.DisplayType;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import jp.co.cyberagent.android.gpuimage.extension.GPUImageWrapper;
 import jp.co.cyberagent.android.gpuimage.extension.GPUImageWrapper.eBlurSize;
-
-import com.appxy.tinyscan.Activity_Detect.CloseReceiver;
-import com.appxy.tools.BitmapTools;
 import com.appxy.tools.LibImgFun;
 
 import android.app.Activity;
@@ -31,19 +30,15 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap.CompressFormat;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 public class Activity_Process extends Activity{
@@ -54,15 +49,16 @@ public class Activity_Process extends Activity{
 	ImageViewTouch image;
 	Bitmap bitmap, bitmap2;
 	
-	ImageView color, gray, bw, bw1, bw2, bw3, bw4, bw5, save;
+	ImageView color, gray, bw, bw1, bw2, bw3, bw4, bw5, save, oldimageview;
 	boolean isRunning = false;
 	
 	Thread mThread;
 	RelativeLayout rl;
-	LinearLayout ll1, ll2, ll3, ll4, ll5, oldll;
+	
 	boolean isShow = true;
 	int oldid = 2;
-	int[] mcolor = {Color.rgb(143, 143, 143), Color.rgb(152, 152, 152), Color.rgb(159, 159, 159), Color.rgb(185, 185, 185), Color.rgb(242, 242, 242)};
+	int[] mid = {R.drawable.grayscal5,R.drawable.grayscal4,R.drawable.grayscal3,R.drawable.grayscal2,R.drawable.grayscal1};
+	int[] mid2 = {R.drawable.grayscal5_2,R.drawable.grayscal4_2,R.drawable.grayscal3_2,R.drawable.grayscal2_2,R.drawable.grayscal1_2};
 	Matrix matrix;
 	int mwidth, mheight;
 	ProgressDialog progressDialog;
@@ -105,15 +101,7 @@ public class Activity_Process extends Activity{
 		gray = (ImageView)findViewById(R.id.process_gray);
 		gray.setOnClickListener(mListener);
 		
-		
-		
-		ll1 = (LinearLayout)findViewById(R.id.ll1);
-		ll2 = (LinearLayout)findViewById(R.id.ll2);
-		ll3 = (LinearLayout)findViewById(R.id.ll3);
-		ll4 = (LinearLayout)findViewById(R.id.ll4);
-		ll5 = (LinearLayout)findViewById(R.id.ll5);
-		oldll = ll3;
-		ll3.setBackgroundColor(Color.rgb(11, 186, 255));
+        
 		
 		
 		bw1 = (ImageView)rl.findViewById(R.id.bw1);
@@ -126,10 +114,12 @@ public class Activity_Process extends Activity{
 		bw3.setOnClickListener(mListener2);
 		bw4.setOnClickListener(mListener2);
 		bw5.setOnClickListener(mListener2);
-		id = preferences.getInt("process", 0);
+		bw3.setImageResource(R.drawable.grayscal3_2);
+		oldimageview = bw3;
+		id = preferences.getInt("process", 1);
 		if(id != 1){
 			 bw.setImageResource(R.drawable.bw);
-			 oldll.setBackgroundColor(mcolor[oldid]);	
+			 oldimageview.setImageResource(mid[oldid]);	
 			 rl.setVisibility(8);
 			 isShow = false;
 		}
@@ -158,7 +148,7 @@ public class Activity_Process extends Activity{
 					
 				}else{
 					    bw.setImageResource(R.drawable.bw);
-					    oldll.setBackgroundColor(mcolor[oldid]);	
+					    oldimageview.setImageResource(mid[oldid]);	
 					    rl.setVisibility(8);
 					    isShow = false;
 					    progressDialog=ProgressDialog.show(context,"Please wait ","Processing...");
@@ -193,9 +183,9 @@ public class Activity_Process extends Activity{
 					rl.setVisibility(0);
 					bw.setImageResource(R.drawable.bw2);
 					isShow = true;
-					oldll.setBackgroundColor(mcolor[oldid]);
-					ll3.setBackgroundColor(Color.rgb(11, 186, 255));
-					oldll = ll3;
+					oldimageview.setImageResource(mid[oldid]);
+					bw3.setImageResource(mid2[2]);
+					oldimageview = bw3;
 					oldid = 2;
 					bw(eBlurSize.BLURSIZE_BASE);
 				}
@@ -207,7 +197,7 @@ public class Activity_Process extends Activity{
 					
 				}else{
 					    bw.setImageResource(R.drawable.bw);
-					    oldll.setBackgroundColor(mcolor[oldid]);	
+					    oldimageview.setImageResource(mid[oldid]);
 					    rl.setVisibility(8);
 					    isShow = false;
 					    progressDialog=ProgressDialog.show(context,"Please wait ","Processing...");
@@ -241,10 +231,10 @@ public class Activity_Process extends Activity{
 				}else{
 					MyApplication.savebitmap = bitmap;
 					MyApplication.tempbitmap = bitmap2;
-				if(where){
+				if(MyApplication.where){
 					
 
-					progressDialog=ProgressDialog.show(context,"Please wait ","Saving...");
+					progressDialog=ProgressDialog.show(context,null,"Saving...");
 					mThread = new Thread(new Runnable(){
 
 						@Override
@@ -254,12 +244,18 @@ public class Activity_Process extends Activity{
 							String photo_path = MyApplication.addpath;
 							File mfile = new File(photo_path);
 							String[] name3 = mfile.list();	
-							BitmapTools.sort(name3);
+							String pattern = "[0-9]{18}.jpg";
+							List<String> namelist = new ArrayList<String>();
+							for(int i=0; i<name3.length; i++){
+								if(name3[i].matches(pattern)){
+									namelist.add(name3[i]);
+								}
+							}
+							if(namelist.size()>0){
+							Collections.sort(namelist,comparator3);
+							int id2 = Integer.parseInt(namelist.get(namelist.size()-1).substring(15, 18)) + 1;
 							
-							int id2 = Integer.parseInt(name3[name3.length-1].substring(15, 18)) + 1;
-							Log.e("sad", name3[name3.length-1].substring(15, 18));
-							
-							String name = name3[0].substring(0,14);
+							String name = namelist.get(0).substring(0,14);
 							String name2 = "";
 								
 								
@@ -296,7 +292,7 @@ public class Activity_Process extends Activity{
 						    	m.what = 2;   
 						    	handler.sendMessage(m);
 							   
-						  
+							}
 						}	
 					});
 					mThread.start();
@@ -318,6 +314,14 @@ public class Activity_Process extends Activity{
 		
 	};
 	
+	Comparator<String> comparator3 = new Comparator<String>(){
+		   public int compare(String s1, String s2) {
+			    
+				  return s1.substring(s1.length()-7, s1.length()-4).compareTo(s2.substring(s2.length()-7, s2.length()-4));
+			  
+		   }
+     };
+	
 	OnClickListener mListener2 = new OnClickListener(){
 
 		@Override
@@ -329,9 +333,9 @@ public class Activity_Process extends Activity{
 				if(isRunning){
 					
 				}else{
-				oldll.setBackgroundColor(mcolor[oldid]);
-				ll1.setBackgroundColor(Color.rgb(11, 186, 255));
-				oldll = ll1;
+				oldimageview.setImageResource(mid[oldid]);
+				bw1.setImageResource(mid2[0]);
+				oldimageview = bw1;
 				oldid = 0;
 				bw(eBlurSize.BLURSIZE_2);
 				}
@@ -340,9 +344,9 @@ public class Activity_Process extends Activity{
                 if(isRunning){
 					
 				}else{
-				oldll.setBackgroundColor(mcolor[oldid]);
-				ll2.setBackgroundColor(Color.rgb(11, 186, 255));
-				oldll = ll2;
+					oldimageview.setImageResource(mid[oldid]);
+					bw2.setImageResource(mid2[1]);
+					oldimageview = bw2;
 				oldid = 1;
 				bw(eBlurSize.BLURSIZE_1);
 				}
@@ -351,9 +355,9 @@ public class Activity_Process extends Activity{
                 if(isRunning){
 					
 				}else{
-				oldll.setBackgroundColor(mcolor[oldid]);
-				ll3.setBackgroundColor(Color.rgb(11, 186, 255));
-				oldll = ll3;
+					oldimageview.setImageResource(mid[oldid]);
+					bw3.setImageResource(mid2[2]);
+					oldimageview = bw3;
 				oldid = 2;
 				bw(eBlurSize.BLURSIZE_BASE);
 				}
@@ -362,9 +366,9 @@ public class Activity_Process extends Activity{
                 if(isRunning){
 					
 				}else{
-				oldll.setBackgroundColor(mcolor[oldid]);
-				ll4.setBackgroundColor(Color.rgb(11, 186, 255));
-				oldll = ll4;
+					oldimageview.setImageResource(mid[oldid]);
+					bw4.setImageResource(mid2[3]);
+					oldimageview = bw4;
 				oldid = 3;
 				bw(eBlurSize.BLURSIZE_1M);
 				}
@@ -373,9 +377,9 @@ public class Activity_Process extends Activity{
                 if(isRunning){
 					
 				}else{
-				oldll.setBackgroundColor(mcolor[oldid]);
-				ll5.setBackgroundColor(Color.rgb(11, 186, 255));
-				oldll = ll5;
+					oldimageview.setImageResource(mid[oldid]);
+					bw5.setImageResource(mid2[4]);
+					oldimageview = bw5;
 				oldid = 4;
 				bw(eBlurSize.BLURSIZE_2M);
 				}
@@ -428,7 +432,7 @@ public class Activity_Process extends Activity{
 					saveImage();
 					LibImgFun.Transfer(path,data, newpath, MyApplication.degree);
 					bitmap =  BitmapFactory.decodeFile(newpath);
-					mwidth = image.getMeasuredWidth();
+					mwidth = image.getMeasuredWidth()-24;
 					mheight = image.getMeasuredHeight();
 					
 					if(bitmap.getWidth() >= bitmap.getHeight()){
@@ -484,39 +488,6 @@ public class Activity_Process extends Activity{
 			
 			image.setImageBitmap(bitmap2);
 		
-			/*if(id == 0){
-				
-			}else{ 
-			
-			progressDialog=ProgressDialog.show(context,"Please wait ","Processing...");
-			mThread = new Thread(new Runnable(){
-
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					isRunning = true;
-					Bitmap src =  BitmapFactory.decodeFile(newpath);
-					if(id == 1){
-						bitmap = GPUImageWrapper.processAdaptiveThreshold(context, eBlurSize.BLURSIZE_BASE, src);
-					}else{
-						 bw.setImageResource(R.drawable.bw);
-						 oldll.setBackgroundColor(mcolor[oldid]);	
-						 rl.setVisibility(8);
-						 isShow = false;
-						 bitmap = GPUImageWrapper.processGrayscale(context, src);
-					}
-					
-					resize();
-					src.recycle();
-					Message m = new Message();
-					m.what = 1;
-					handler.sendMessage(m);
-				}
-				
-			});
-			mThread.start();
-			}*/
-			
 			break;
 		case 1:
 			progressDialog.dismiss();
@@ -545,6 +516,7 @@ public class Activity_Process extends Activity{
 	
 	public void resize(){
 		bitmap2 = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+		
 	}
 
 

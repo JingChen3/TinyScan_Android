@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/main_bg">
+    android:background="@drawable/main_bg"
+    >
     <RelativeLayout
         android:id="@+id/set_layout"
         android:layout_width="match_parent"
@@ -14,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:src="@drawable/back_selector"/>
+            android:src="@drawable/main_back_selector"/>
         <TextView 
            
             android:layout_width="wrap_content"
@@ -23,84 +24,21 @@
             android:text="Settings"
             android:textColor="#FFFFFF"
             android:layout_centerVertical="true"
-            android:textSize="25sp"/>
+            android:textSize="21sp"/>
         
     </RelativeLayout>
     
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="5dp"
         android:layout_below="@+id/set_layout"
-        android:layout_marginRight="15dp"
+        android:layout_marginRight="16dp"
         android:orientation="vertical">
         <RelativeLayout
             
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            
-            <TextView 
-                android:id="@+id/set_size_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:layout_centerVertical="true"
-                android:textColor="#1c1c1c"
-                android:text="Default Page Size"/>
-            <TextView 
-                android:id="@+id/set_size_text2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:textColor="#979797"
-                android:text="A4"
-               />
-        </RelativeLayout>
-        
-        <LinearLayout 
-            android:layout_width="match_parent"
-            android:layout_height="2dip"
-            android:layout_marginTop="5dp"
-            android:background="#979797">
-            
-        </LinearLayout>
-        
-        <RelativeLayout
-            android:layout_marginTop="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            
-            <TextView 
-                android:id="@+id/set_process_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:layout_centerVertical="true"
-                android:textColor="#1c1c1c"
-                android:text="Default Process"/>
-            <TextView 
-                android:id="@+id/set_process_text2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:textColor="#979797"
-             
-               />
-        </RelativeLayout>
-        
-        <LinearLayout 
-            android:layout_width="match_parent"
-            android:layout_height="2dip"
-            android:layout_marginTop="5dp"
-            android:background="#979797">
-            
-        </LinearLayout>
-        
-        <RelativeLayout
-            android:layout_marginTop="25dp"
+           
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             
@@ -108,7 +46,98 @@
                
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:textSize="16sp"
+                android:layout_marginLeft="8dp"
+                android:layout_centerVertical="true"
+                android:textColor="#979797"
+                android:text="GENERAL"/>
+         
+        </RelativeLayout>
+        
+        <LinearLayout 
+            android:layout_width="match_parent"
+            android:layout_height="2dip"
+            android:layout_marginTop="5dp"
+            android:background="#d4d4d4">
+            
+        </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/set_layout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            
+            <TextView 
+                android:id="@+id/set_size_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginLeft="8dp"
+                android:paddingTop="13dp"
+                android:textColor="#4B4B4B"
+                android:text="Default Page Size"/>
+            <TextView 
+                android:id="@+id/set_size_text2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/set_size_text"
+                android:paddingBottom="13dp"
+                android:layout_marginLeft="8dp"
+                android:textColor="#8a8a8a"
+                android:text="A4"
+               />
+        </RelativeLayout>
+        
+        <LinearLayout 
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            
+            android:background="#cecece">
+            
+        </LinearLayout>
+        
+        <RelativeLayout
+            android:id="@+id/set_layout2"
+           
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            
+            <TextView 
+                android:id="@+id/set_process_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginLeft="8dp"
+                android:paddingTop="13dp"
+                android:textColor="#4B4B4B"
+                android:text="Default Process"/>
+            <TextView 
+                android:id="@+id/set_process_text2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/set_process_text"
+                android:paddingBottom="13dp"
+                android:layout_marginLeft="8dp"
+                android:text="Color"
+                android:textColor="#8a8a8a"
+             
+               />
+        </RelativeLayout>
+        
+       
+        
+        <RelativeLayout
+            
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            
+            <TextView 
+               
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginLeft="8dp"
                 android:layout_centerVertical="true"
                 android:textColor="#979797"
                 android:text="SUPPORT"/>
@@ -119,12 +148,13 @@
             android:layout_width="match_parent"
             android:layout_height="2dip"
             android:layout_marginTop="5dp"
-            android:background="#979797">
+            android:background="#d4d4d4">
             
         </LinearLayout>
         
          <RelativeLayout
-            android:layout_marginTop="20dp"
+              android:id="@+id/set_layout3"
+            
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             
@@ -132,44 +162,18 @@
                 android:id="@+id/set_send"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:paddingTop="13dp"
+                android:paddingBottom="13dp"
+                android:textSize="16sp"
+                android:layout_marginLeft="8dp"
                 android:layout_centerVertical="true"
-                android:textColor="#1c1c1c"
+                android:textColor="#4B4B4B"
                 android:text="Send Feedback"/>
            
         </RelativeLayout>
         
-        <LinearLayout 
-            android:layout_width="match_parent"
-            android:layout_height="1dip"
-            android:layout_marginTop="5dp"
-            android:background="#979797">
-            
-        </LinearLayout>
         
-         <RelativeLayout
-            android:layout_marginTop="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            
-            <TextView 
-                android:id="@+id/set_faq"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:layout_centerVertical="true"
-                android:textColor="#1c1c1c"
-                android:text="FAQ"/>
-           
-        </RelativeLayout>
-        
-        <LinearLayout 
-            android:layout_width="match_parent"
-            android:layout_height="1dip"
-            android:layout_marginTop="5dp"
-            android:background="#979797">
-            
-        </LinearLayout>
+       
    </LinearLayout>
 
 </RelativeLayout>

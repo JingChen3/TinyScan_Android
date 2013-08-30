@@ -27,7 +27,7 @@ public class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
     @Override
     protected Bitmap doInBackground(String... params) {
         data = params[0];
-        Bitmap bitmap =  BitmapTools.getPhoto(data, 400, 600);
+        Bitmap bitmap =  BitmapTools.getPhoto(data, 300, 400);
         
         return bitmap;
     }

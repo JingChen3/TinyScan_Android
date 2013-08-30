@@ -16,9 +16,9 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" 
           android:layout_centerVertical="true"
-         android:layout_alignParentLeft="true"
-         android:layout_marginRight="20dp"
-         android:layout_toLeftOf="@+id/save_photo_line"
+          android:layout_alignParentLeft="true"
+          android:layout_marginRight="10dp"
+          android:layout_toLeftOf="@+id/save_photo_line"
           android:layout_marginLeft="10dp"
           android:layout_alignTop="@+id/save_photo_save"
           android:layout_alignBottom="@+id/save_photo_save"
@@ -26,10 +26,11 @@
           >
           <EditText
               android:id="@+id/save_photo_text5"
-              android:layout_width="match_parent"
+              android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:paddingLeft="10dp"
-              android:paddingRight="10dp"
+              android:layout_toLeftOf="@+id/save_text_delete"
+              android:layout_alignParentLeft="true"
               android:text="New Document"
               android:textSize="18sp"
               android:textColorHint="#FFFFFF"
@@ -40,6 +41,16 @@
               android:background="@null"
               android:inputType="text"
               android:singleLine="true"    />
+          <ImageView 
+              android:id="@+id/save_text_delete"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content" 
+              android:visibility="invisible"
+              android:layout_centerVertical="true"
+              
+              android:layout_marginRight="1dp"
+              android:layout_alignParentRight="true"
+              android:src="@drawable/edit_cancel_selector"/>
           <ImageView 
               android:id="@+id/save_photo_text_line"
               android:layout_width="match_parent"
@@ -52,7 +63,7 @@
       </RelativeLayout>
       <LinearLayout
           android:id="@+id/save_photo_line"
-          android:layout_width="1dip"
+          android:layout_width="1px"
           android:layout_height="wrap_content"
           android:layout_toLeftOf="@+id/save_photo_save"
           android:layout_alignTop="@+id/save_photo_save"
@@ -69,10 +80,16 @@
              android:src="@drawable/save_selector2"
            />
      </RelativeLayout>
+     <ImageView 
+        android:id="@+id/save_photo_shadow1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/save_photo_rl"
+        android:background="@drawable/nav_shadow"/>
      <RelativeLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/save_photo_rl" 
+          android:layout_below="@+id/save_photo_shadow1" 
           android:layout_alignParentBottom="true">
        <ImageView 
            android:id="@+id/save_photo_image"
